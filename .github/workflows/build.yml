@@ -1,0 +1,26 @@
+---
+name: Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: update submodules
+        run: git submodule update --init --recursive
+
+      - name: Build
+        run:  |
+          Import-Module .\tools\OpenConsole.psm1
+          Set-MsBuildDevEnvironment
+          Invoke-OpenConsoleBuild /p:Configuration=Release
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: release
+          path: bin/x64/Release
