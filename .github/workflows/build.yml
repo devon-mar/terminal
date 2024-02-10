@@ -14,8 +14,13 @@ jobs:
       - name: update submodules
         run: git submodule update --init --recursive
 
+      - name: nuget restore
+        run: |
+          nuget restore "OpenConsole.sln"
+          nuget restore "dep\nuget\packages.config"
+
       - name: Build
-        run:  |
+        run: |
           Import-Module .\tools\OpenConsole.psm1
           Set-MsBuildDevEnvironment
           Invoke-OpenConsoleBuild /p:Configuration=Release
